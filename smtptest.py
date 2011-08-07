@@ -32,6 +32,11 @@ class SmtpTestApp:
         root.config(menu=menubar)
 
     def add_status(self):
+        status = Label(self.root, text="", bd=1, relief=SUNKEN, anchor=W)
+        status.pack(side=BOTTOM, fill=X)
+
+    def __init__(self, root):
+        root.title("smtptest")
         root.geometry("%dx%d" % (640, 480))
 
         self.root = root
@@ -51,6 +56,8 @@ class SmtpTestApp:
         portEntry.grid(row=0, column=3, sticky=E+W, padx=2)
         connect = Button(self.frame, text="Connect")
         connect.grid(row=0, column=4, sticky=E, padx=2)
+
+        self.frame.pack()
 
 root = Tk()
 app = SmtpTestApp(root)
