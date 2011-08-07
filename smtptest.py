@@ -50,6 +50,9 @@ class SmtpTestApp:
 
         # "File" menu
         menu_file = Menu(menubar, tearoff=0)
+        menu_file.add_command(label="Connect...", command=self.hello)
+        menu_file.add_command(label="Disconnect", command=self.hello, state=DISABLED)
+        menu_file.add_separator()
         menu_file.add_command(label="Quit", command=self.hello)
         menubar.add_cascade(label="File", menu=menu_file)
 
