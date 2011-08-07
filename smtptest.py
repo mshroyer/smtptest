@@ -5,8 +5,37 @@ from Tkinter import *
 class SmtpTestApp:
     "smtptest main window"
 
+    def __init__(self, root):
+        root.title("smtptest")
+        root.geometry("%dx%d" % (640, 480))
+
+        self.root = root
+        self.frame = Frame(root)
+
+        self.add_menu()
+        self.add_status("Not connected.")
+
+        serverLabel = Label(self.frame, text="Server:")
+        serverLabel.grid(row=0, column=0, sticky=E, padx=2)
+        serverEntry = Entry(self.frame)
+        serverEntry.grid(row=0, column=1, sticky=E+W, padx=2)
+        portLabel = Label(self.frame, text="Port:")
+        portLabel.grid(row=0, column=2, sticky=E, padx=2)
+        portEntry = Entry(self.frame)
+        portEntry.insert(0, "25")
+        portEntry.grid(row=0, column=3, sticky=E+W, padx=2)
+        connect = Button(self.frame, text="Connect")
+        connect.grid(row=0, column=4, sticky=E, padx=2)
+
+        self.frame.pack()
+
     def hello(self):
         print "Hello!"
+
+    def status_msg(self, text):
+        "Set window status message"
+
+        self.status_string.set(text)
 
     def add_entry(self, text):
         column, row = self.frame.grid_size()
@@ -31,33 +60,11 @@ class SmtpTestApp:
 
         root.config(menu=menubar)
 
-    def add_status(self):
-        status = Label(self.root, text="", bd=1, relief=SUNKEN, anchor=W)
-        status.pack(side=BOTTOM, fill=X)
-
-    def __init__(self, root):
-        root.title("smtptest")
-        root.geometry("%dx%d" % (640, 480))
-
-        self.root = root
-        self.frame = Frame(root)
-
-        self.add_menu()
-        self.add_status()
-
-        serverLabel = Label(self.frame, text="Server:")
-        serverLabel.grid(row=0, column=0, sticky=E, padx=2)
-        serverEntry = Entry(self.frame)
-        serverEntry.grid(row=0, column=1, sticky=E+W, padx=2)
-        portLabel = Label(self.frame, text="Port:")
-        portLabel.grid(row=0, column=2, sticky=E, padx=2)
-        portEntry = Entry(self.frame)
-        portEntry.insert(0, "25")
-        portEntry.grid(row=0, column=3, sticky=E+W, padx=2)
-        connect = Button(self.frame, text="Connect")
-        connect.grid(row=0, column=4, sticky=E, padx=2)
-
-        self.frame.pack()
+    def add_status(self, text=""):
+        self.status_string = StringVar()
+        self.status_string.set(text)
+        status_label = Label(self.root, textvariable=self.status_string, bd=1, relief=SUNKEN, anchor=W)
+        status_label.pack(side=BOTTOM, fill=X)
 
 root = Tk()
 app = SmtpTestApp(root)
