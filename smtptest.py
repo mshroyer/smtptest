@@ -16,18 +16,6 @@ class SmtpTestApp:
         self.add_menu()
         self.add_status("Not connected.")
 
-        serverLabel = Label(self.frame, text="Server:")
-        serverLabel.grid(row=0, column=0, sticky=E, padx=2)
-        serverEntry = Entry(self.frame)
-        serverEntry.grid(row=0, column=1, sticky=E+W, padx=2)
-        portLabel = Label(self.frame, text="Port:")
-        portLabel.grid(row=0, column=2, sticky=E, padx=2)
-        portEntry = Entry(self.frame)
-        portEntry.insert(0, "25")
-        portEntry.grid(row=0, column=3, sticky=E+W, padx=2)
-        connect = Button(self.frame, text="Connect")
-        connect.grid(row=0, column=4, sticky=E, padx=2)
-
         self.frame.pack()
 
     def connect(self):
