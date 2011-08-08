@@ -29,6 +29,10 @@ class SmtpTestApp:
 
         self.frame.pack()
 
+    def connect(self):
+        d = ConnectDialog(self.root)
+        self.root.wait_window(d.top)
+
     def hello(self):
         print "Hello!"
 
@@ -50,7 +54,7 @@ class SmtpTestApp:
 
         # "File" menu
         menu_file = Menu(menubar, tearoff=0)
-        menu_file.add_command(label="Connect...", command=self.hello)
+        menu_file.add_command(label="Connect...", command=self.connect)
         menu_file.add_command(label="Disconnect", command=self.hello, state=DISABLED)
         menu_file.add_separator()
         menu_file.add_command(label="Quit", command=self.hello)
@@ -68,6 +72,31 @@ class SmtpTestApp:
         self.status_string.set(text)
         status_label = Label(self.root, textvariable=self.status_string, bd=1, relief=SUNKEN, anchor=W)
         status_label.pack(side=BOTTOM, fill=X)
+
+
+class ConnectDialog:
+    def __init__(self, parent):
+        self.top = Toplevel(parent)
+        
+        Label(self.top, text="Server:").grid(row=0, column=0, sticky=E, padx=2)
+        self.entry_server = Entry(self.top)
+        self.entry_server.grid(row=0, column=1, sticky=E, padx=2)
+
+        Label(self.top, text="Port:").grid(row=1, column=0, sticky=E, padx=2)
+        self.entry_port = Entry(self.top)
+        self.entry_port.grid(row=1, column=1, sticky=E, padx=2)
+
+        Button(self.top, text="Connect", command=self.connect)\
+            .grid(row=2, column=0)
+        Button(self.top, text="Cancel", command=self.cancel)\
+            .grid(row=2, column=1)
+
+    def connect(self):
+        self.top.destroy()
+
+    def cancel(self):
+        self.top.destroy()
+
 
 root = Tk()
 app = SmtpTestApp(root)
