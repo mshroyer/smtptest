@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from Tkinter import *
+from gui_support import ModalDialog
 
 class SmtpTestApp:
     "smtptest main window"
@@ -30,8 +31,7 @@ class SmtpTestApp:
         self.frame.pack()
 
     def connect(self):
-        d = ConnectDialog(self.root)
-        self.root.wait_window(d.top)
+        d = ConnectDialog(self.root, "Connect to server")
 
     def hello(self):
         print "Hello!"
@@ -74,29 +74,20 @@ class SmtpTestApp:
         status_label.pack(side=BOTTOM, fill=X)
 
 
-class ConnectDialog:
-    def __init__(self, parent):
-        self.top = Toplevel(parent)
-        
-        Label(self.top, text="Server:").grid(row=0, column=0, sticky=E, padx=2)
-        self.entry_server = Entry(self.top)
+class ConnectDialog(ModalDialog):
+    def body(self, master):
+        Label(master, text="Server:").grid(row=0, column=0, sticky=E, padx=2)
+        self.entry_server = Entry(master)
         self.entry_server.grid(row=0, column=1, sticky=E, padx=2)
 
-        Label(self.top, text="Port:").grid(row=1, column=0, sticky=E, padx=2)
-        self.entry_port = Entry(self.top)
+        Label(master, text="Port:").grid(row=1, column=0, sticky=E, padx=2)
+        self.entry_port = Entry(master)
         self.entry_port.grid(row=1, column=1, sticky=E, padx=2)
 
-        Button(self.top, text="Connect", command=self.connect)\
-            .grid(row=2, column=0)
-        Button(self.top, text="Cancel", command=self.cancel)\
-            .grid(row=2, column=1)
-
-    def connect(self):
-        self.top.destroy()
-
-    def cancel(self):
-        self.top.destroy()
-
+    def apply(self):
+        server = self.entry_server.get()
+        port = self.entry_port.get()
+        print server, port
 
 root = Tk()
 app = SmtpTestApp(root)
