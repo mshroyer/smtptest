@@ -48,7 +48,7 @@ class ModalDialog(Toplevel):
         self.wait_window(self)
 
     def body(self, master):
-        pass
+        raise NotImplementedError
 
     def buttonbox(self):
         box = Frame(self, padx=5, pady=5)
