@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from Tkinter import *
-from gui_support import ModalDialog
+from gui_support import *
 
 class SmtpTestApp:
     "smtptest main window"
@@ -20,6 +20,9 @@ class SmtpTestApp:
 
     def connect(self):
         d = ConnectDialog(self.root, "Connect to server")
+
+    def about(self):
+        d = AboutDialog(self.root, "About smtptest")
 
     def hello(self):
         print "Hello!"
@@ -50,7 +53,7 @@ class SmtpTestApp:
 
         # "Help" menu
         menu_help = Menu(menubar, tearoff=0)
-        menu_help.add_command(label="About", command=self.hello)
+        menu_help.add_command(label="About", command=self.about)
         menubar.add_cascade(label="Help", menu=menu_help)
 
         root.config(menu=menubar)
@@ -76,6 +79,28 @@ class ConnectDialog(ModalDialog):
         server = self.entry_server.get()
         port = self.entry_port.get()
         print server, port
+
+
+class AboutDialog(ModalDialog):
+    BUTTONS = ButtonTypes.OK
+    
+    def body(self, master):
+        text = Text(master, padx=10, pady=10, width=52, height=5, relief=FLAT, wrap=WORD)
+        hyperlink = HyperlinkManager(text)
+
+        text.insert(INSERT, "A simple interactive SMTP testing tool."
+                    + " Please see the Github project page for information"
+                    + " and source code:\n\n")
+        text.insert(INSERT, "https://github.com/markshroyer/smtptest/", hyperlink.add(web_action("https://github.com/markshroyer/smtptest/")))
+        text.config(state=DISABLED)
+
+        # Cause I'll be damned if I know how to actually specify a
+        # transparent background for a Text widget in Tk...
+        text.config(bg=get_system_bg())
+        text.config(font=get_system_font())
+        
+        text.pack()
+
 
 root = Tk()
 app = SmtpTestApp(root)

@@ -1,5 +1,13 @@
 from Tkinter import *
-import os
+import os, webbrowser
+
+def get_system_bg(): return Label()['bg']
+def get_system_font(): return Label()['font']
+
+def enum(**enums):
+    return type('Enum', (), enums)
+
+ButtonTypes = enum(OK=0b00000001, CANCEL=0b00000010)
 
 class ModalDialog(Toplevel):
     """Modal Tkinter dialog window
@@ -10,6 +18,8 @@ class ModalDialog(Toplevel):
     http://effbot.org/tkinterbook/
 
     """
+
+    BUTTONS = ButtonTypes.OK | ButtonTypes.CANCEL
 
     def __init__(self, parent, title=None):
         Toplevel.__init__(self, parent)
@@ -41,15 +51,17 @@ class ModalDialog(Toplevel):
         pass
 
     def buttonbox(self):
-        box = Frame(self)
+        box = Frame(self, padx=5, pady=5)
 
-        w = Button(box, text="OK", width=10, command=self.ok, default=ACTIVE)
-        w.pack(side=LEFT, padx=5, pady=5)
-        w = Button(box, text="Cancel", width=10, command=self.cancel)
-        w.pack(side=LEFT, padx=5, pady=5)
+        if self.BUTTONS & ButtonTypes.OK:
+            w = Button(box, text="OK", width=10, command=self.ok, default=ACTIVE)
+            w.pack(side=LEFT, padx=5, pady=5)
+            self.bind("<Return>", self.ok)
 
-        self.bind("<Return>", self.ok)
-        self.bind("<Escape>", self.cancel)
+        if self.BUTTONS & ButtonTypes.CANCEL:
+            w = Button(box, text="Cancel", width=10, command=self.cancel)
+            w.pack(side=LEFT, padx=5, pady=5)
+            self.bind("<Escape>", self.cancel)
 
         box.pack()
 
@@ -73,3 +85,46 @@ class ModalDialog(Toplevel):
 
     def apply(self):
         pass
+
+
+def web_action(url):
+    return lambda: webbrowser.open(url)
+
+
+class HyperlinkManager:
+    """Hyperlink manager for text widgets
+
+    A utility class for adding hyperlinks to a Tkinter text widget, based
+    on the example found in the Tkinter book:
+
+    http://effbot.org/zone/tkinter-text-hyperlink.htm
+
+    """
+
+    def __init__(self, text):
+        self.text = text
+        self.text.tag_config("hyper", foreground="blue", underline=1)
+        self.text.tag_bind("hyper", "<Enter>", self._enter)
+        self.text.tag_bind("hyper", "<Leave>", self._leave)
+        self.text.tag_bind("hyper", "<Button-1>", self._click)
+        self.reset()
+
+    def reset(self):
+        self.links = {}
+
+    def add(self, action):
+        tag = "hyper-%d" % len(self.links)
+        self.links[tag] = action
+        return "hyper", tag
+
+    def _enter(self, event):
+        self.text.config(cursor="hand2")
+
+    def _leave(self, event):
+        self.text.config(cursor="")
+
+    def _click(self, event):
+        for tag in self.text.tag_names(CURRENT):
+            if tag[:6] == "hyper-":
+                self.links[tag]()
+                return
