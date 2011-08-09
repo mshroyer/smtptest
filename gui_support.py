@@ -27,6 +27,8 @@ class ModalDialog(Toplevel):
 
         if title:
             self.title(title)
+        elif self.TITLE:
+            self.title(self.TITLE)
 
         self.parent = parent
         self.result = None

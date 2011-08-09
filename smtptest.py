@@ -45,15 +45,25 @@ class SmtpTestApp:
 
         # "File" menu
         menu_file = Menu(menubar, tearoff=0)
-        menu_file.add_command(label="Connect...", command=self.connect)
-        menu_file.add_command(label="Disconnect", command=self.hello, state=DISABLED)
+        menu_file.add_command(
+            label="Connect...",
+            command=lambda: ConnectDialog(self.root)
+            )
+        menu_file.add_command(
+            label="Disconnect",
+            command=self.hello,
+            state=DISABLED
+            )
         menu_file.add_separator()
         menu_file.add_command(label="Quit", command=self.hello)
         menubar.add_cascade(label="File", menu=menu_file)
 
         # "Help" menu
         menu_help = Menu(menubar, tearoff=0)
-        menu_help.add_command(label="About", command=self.about)
+        menu_help.add_command(
+            label="About",
+            command=lambda: AboutDialog(self.root)
+            )
         menubar.add_cascade(label="Help", menu=menu_help)
 
         root.config(menu=menubar)
@@ -66,6 +76,8 @@ class SmtpTestApp:
 
 
 class ConnectDialog(ModalDialog):
+    TITLE = "Connect to server"
+
     def body(self, master):
         Label(master, text="Server:").grid(row=0, column=0, sticky=E, padx=2)
         self.entry_server = Entry(master)
@@ -82,6 +94,7 @@ class ConnectDialog(ModalDialog):
 
 
 class AboutDialog(ModalDialog):
+    TITLE   = "About smtptest"
     BUTTONS = ButtonTypes.OK
     
     def body(self, master):
