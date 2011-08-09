@@ -102,6 +102,7 @@ class AboutDialog(ModalDialog):
         text.pack()
 
 
-root = Tk()
-app = SmtpTestApp(root)
-root.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    app = SmtpTestApp(root)
+    root.mainloop()
