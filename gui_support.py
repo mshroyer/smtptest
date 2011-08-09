@@ -117,6 +117,10 @@ class HyperlinkManager:
         self.links[tag] = action
         return "hyper", tag
 
+    def insert_url(self, index, url, text=None):
+        if text == None: text = url
+        self.text.insert(index, text, self.add(web_action(url)))
+
     def _enter(self, event):
         self.text.config(cursor="hand2")
 

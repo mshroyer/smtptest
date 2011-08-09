@@ -91,7 +91,7 @@ class AboutDialog(ModalDialog):
         text.insert(INSERT, "A simple interactive SMTP testing tool."
                     + " Please see the Github project page for information"
                     + " and source code:\n\n")
-        text.insert(INSERT, "https://github.com/markshroyer/smtptest/", hyperlink.add(web_action("https://github.com/markshroyer/smtptest/")))
+        hyperlink.insert_url(INSERT, "https://github.com/markshroyer/smtptest/")
         text.config(state=DISABLED)
 
         # Cause I'll be damned if I know how to actually specify a
